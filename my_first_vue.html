@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Vue3 Test</title>
   <link rel="icon" href="data:;base64,=">
+  <link href="./fontawesome/css/fontawesome.min.css" rel="stylesheet" />
+  <link href="./fontawesome/css/regular.min.css" rel="stylesheet" />
 </head>
 <body>
   <script type="importmap">
@@ -16,16 +18,18 @@
   </script>
 
   <div id="app">
-      <h1>Hallo, {{name}}!</h1>
+      <h1>Hallo, {{name}}! <i class="fa-regular fa-house"></i></h1>
       <div v-if="workers.length === 0">No workers available.</div>
       <div v-else>
-        <input v-model="searchString" placeholder="Suche" />
+        <div style="margin-bottom: 10px;">
+          <i class="fa-regular fa-lightbulb"></i><input v-model="searchString" placeholder="Suche" />
+        </div>
         <table>
           <thead>
-            <th @click="setSortColumn('name')">Name</th>
-            <th @click="setSortColumn('position')">Position</th>
-            <th @click="setSortColumn('office')">Office</th>
-            <th @click="setSortColumn('age')">Age</th>
+            <th @click="setSortColumn('name')">Name <i class="fa-regular" :class="classObjectName"></i></th>
+            <th @click="setSortColumn('position')">Position <i class="fa-regular" :class="classObjectPosition"></i></th>
+            <th @click="setSortColumn('office')">Office <i class="fa-regular" :class="classObjectOffice"></i></th>
+            <th @click="setSortColumn('age')">Age <i class="fa-regular" :class="classObjectAge"></i></th>
           </thead>
           <tbody>
               <tr v-for="(worker, index) in filteredWorkers" :key="index">
@@ -50,7 +54,15 @@
             workers: [],
             searchString: "",
             sortColumn: "",
-            order: "ASC"       
+            order: "ASC",
+            isNameSortedAsc: false,
+            isNameSortedDesc: false,
+            isPositionSortedAsc: false,
+            isPositionSortedDesc: false,
+            isOfficeSortedAsc: false,
+            isOfficeSortedDesc: false,
+            isAgeSortedAsc: false,
+            isAgeSortedDesc: false       
           }
         },
         methods: {
@@ -74,6 +86,15 @@
                   this.order = "ASC";
                   this.sortColumn = column;
               }
+
+              this.isNameSortedAsc = column === "name" && this.order === "ASC";
+              this.isNameSortedDesc = column === "name" && this.order === "DESC";
+              this.isPositionSortedAsc = column === "position" && this.order === "ASC";
+              this.isPositionSortedDesc = column === "position" && this.order === "DESC";
+              this.isOfficeSortedAsc = column === "office" && this.order === "ASC";
+              this.isOfficeSortedDesc = column === "office" && this.order === "DESC";
+              this.isAgeSortedAsc = column === "age" && this.order === "ASC";
+              this.isAgeSortedDesc = column === "age" && this.order === "DESC";
           }
         },
         computed: {
@@ -105,6 +126,34 @@
 
                 return filteredWorkers;
             },
+            classObjectName: function() {
+                return {
+                    'fa-circle-up': this.isNameSortedAsc,
+                    'fa-circle-down': this.isNameSortedDesc,
+                    'fa-circle': !this.isNameSortedAsc && !this.isNameSortedDesc
+                }
+            },
+            classObjectPosition: function() {
+                return {
+                    'fa-circle-up': this.isPositionSortedAsc,
+                    'fa-circle-down': this.isPositionSortedDesc,
+                    'fa-circle': !this.isPositionSortedAsc && !this.isPositionSortedDesc
+                }
+            },
+            classObjectOffice: function() {
+                return {
+                    'fa-circle-up': this.isOfficeSortedAsc,
+                    'fa-circle-down': this.isOfficeSortedDesc,
+                    'fa-circle': !this.isOfficeSortedAsc && !this.isOfficeSortedDesc
+                }
+            },
+            classObjectAge: function() {
+                return {
+                    'fa-circle-up': this.isAgeSortedAsc,
+                    'fa-circle-down': this.isAgeSortedDesc,
+                    'fa-circle': !this.isAgeSortedAsc && !this.isAgeSortedDesc
+                }
+            },                                    
         },
         mounted() {
             this.getWorkers();
