@@ -7,6 +7,7 @@
   <link rel="icon" href="data:;base64,=">
   <link href="./fontawesome/css/fontawesome.min.css" rel="stylesheet" />
   <link href="./fontawesome/css/regular.min.css" rel="stylesheet" />
+  <link href="./my_first_vue.css" rel="stylesheet" />
 </head>
 <body>
   <script type="importmap">
@@ -22,7 +23,7 @@
       <div v-if="workers.length === 0">No workers available.</div>
       <div v-else>
         <div style="margin-bottom: 10px;">
-          <i class="fa-regular fa-lightbulb"></i><input v-model="searchString" placeholder="Suche" />
+          <input v-model="searchString" placeholder="Suche" /><i class="fa-regular fa-lightbulb"></i>
         </div>
         <table>
           <thead>
