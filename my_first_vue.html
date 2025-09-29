@@ -19,53 +19,23 @@
   </script>
 
   <div id="app">
-      <h1>Hallo, {{name}}! <i class="fa-regular fa-house"></i></h1>
-      <div v-if="workers.length === 0">No workers available.</div>
-      <div v-else>
-        <div style="margin-bottom: 10px;">
-          <input v-model="searchString" placeholder="Suche" /><i class="fa-regular fa-lightbulb"></i>
-        </div>
-        <table>
-          <thead>
-            <th @click="setSortColumn('name')">Name <i class="fa-regular" :class="classObjectName"></i></th>
-            <th @click="setSortColumn('position')">Position <i class="fa-regular" :class="classObjectPosition"></i></th>
-            <th @click="setSortColumn('office')">Office <i class="fa-regular" :class="classObjectOffice"></i></th>
-            <th @click="setSortColumn('age')">Age <i class="fa-regular" :class="classObjectAge"></i></th>
-          </thead>
-          <tbody>
-              <tr v-for="(worker, index) in filteredWorkers" :key="index">
-                  <td>{{worker.name}}</td>
-                  <td>{{worker.position}}</td>
-                  <td>{{worker.office}}</td>
-                  <td>{{worker.age}}</td>
-              </tr>
-          </tbody>
-        </table>
-      </div>  
   </div>
 
-
   <script type="module">
-    import { createApp} from 'vue'; //using import map
+    import { createApp, defineAsyncComponent} from 'vue'; //using import map
 
       createApp({
         data() {
           return {
-            name: 'Nivethan',
             workers: [],
-            searchString: "",
-            sortColumn: "",
-            order: "ASC",
-            isNameSortedAsc: false,
-            isNameSortedDesc: false,
-            isPositionSortedAsc: false,
-            isPositionSortedDesc: false,
-            isOfficeSortedAsc: false,
-            isOfficeSortedDesc: false,
-            isAgeSortedAsc: false,
-            isAgeSortedDesc: false       
+            headers: []    
           }
         },
+        //define how to import the component
+        components: {
+            'Table': defineAsyncComponent( () => import('./table_component.js') )
+        },
+        template: `<Table :headers="headers" :workers="workers"></Table>`,        
         methods: {
           async getWorkers() {
               const workers = [
@@ -75,86 +45,19 @@
                   { name: "Jennifer Chang", position: "Regional Director", office: "Singapore", age: 28 },
               ];
 
+              const headers = [
+                  { key: "name", value: "Name" },
+                  { key: "position", value: "Position" },
+                  { key: "office", value: "Office" },
+                  { key: "age", value: "Age" },
+              ];
+
               //make it async to simulate fetching data
-              Promise.resolve(workers).then(resolvedWorkers => {
+              Promise.resolve([workers, headers]).then(([resolvedWorkers, resolvedHeaders]) => {
                   this.workers = resolvedWorkers;
+                  this.headers = resolvedHeaders;
               });
-          },
-          setSortColumn(column) {
-              if (this.sortColumn === column) {
-                  this.order = this.order === "ASC" ? "DESC" : "ASC";
-              } else {
-                  this.order = "ASC";
-                  this.sortColumn = column;
-              }
-
-              this.isNameSortedAsc = column === "name" && this.order === "ASC";
-              this.isNameSortedDesc = column === "name" && this.order === "DESC";
-              this.isPositionSortedAsc = column === "position" && this.order === "ASC";
-              this.isPositionSortedDesc = column === "position" && this.order === "DESC";
-              this.isOfficeSortedAsc = column === "office" && this.order === "ASC";
-              this.isOfficeSortedDesc = column === "office" && this.order === "DESC";
-              this.isAgeSortedAsc = column === "age" && this.order === "ASC";
-              this.isAgeSortedDesc = column === "age" && this.order === "DESC";
           }
-        },
-        computed: {
-            filteredWorkers() {
-                const filteredWorkers = this.searchString === ""
-                    ? this.workers
-                    : this.workers.filter(wo => Object.values(wo).join("").toLowerCase().indexOf(this.searchString.toLowerCase()) !== -1);
-
-                const column = this.sortColumn
-                const order = this.order;
-
-                filteredWorkers.sort(function(a, b) {
-                    var nameA = a[column]+"".toUpperCase();
-                    var nameB = b[column]+"".toUpperCase();
-                    if (order === "DESC" && nameA > nameB) {
-                        return -1;
-                    }
-                    if (order === "DESC" && nameA < nameB) {
-                        return 1;
-                    }
-                    if (nameA < nameB) {
-                        return -1;
-                    }
-                    if (nameA > nameB) {
-                        return 1;
-                    }
-                    return 0;
-                });
-
-                return filteredWorkers;
-            },
-            classObjectName: function() {
-                return {
-                    'fa-circle-up': this.isNameSortedAsc,
-                    'fa-circle-down': this.isNameSortedDesc,
-                    'fa-circle': !this.isNameSortedAsc && !this.isNameSortedDesc
-                }
-            },
-            classObjectPosition: function() {
-                return {
-                    'fa-circle-up': this.isPositionSortedAsc,
-                    'fa-circle-down': this.isPositionSortedDesc,
-                    'fa-circle': !this.isPositionSortedAsc && !this.isPositionSortedDesc
-                }
-            },
-            classObjectOffice: function() {
-                return {
-                    'fa-circle-up': this.isOfficeSortedAsc,
-                    'fa-circle-down': this.isOfficeSortedDesc,
-                    'fa-circle': !this.isOfficeSortedAsc && !this.isOfficeSortedDesc
-                }
-            },
-            classObjectAge: function() {
-                return {
-                    'fa-circle-up': this.isAgeSortedAsc,
-                    'fa-circle-down': this.isAgeSortedDesc,
-                    'fa-circle': !this.isAgeSortedAsc && !this.isAgeSortedDesc
-                }
-            },                                    
         },
         mounted() {
             this.getWorkers();
