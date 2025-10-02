@@ -1,4 +1,7 @@
 
+//Note: Component requires FontAwesome for some icons.
+
+//Note: this template must not begin with a <template> tag
 const template = `
       <h1>Hallo, {{name}}! <i class="fa-regular fa-house"></i></h1>
       <div v-if="workers.length === 0">No workers available.</div>
@@ -22,19 +25,19 @@ const template = `
               </tr>
           </tbody>
         </table>
-      </div> 
+      </div>
 </template>
 `;
 
 
 export default {
-    props: ["headers", "workers"],
+    props: ["headers", "workers", "defaultSortColumn"],
     data() {
         return {
             sortColumn: "",
             order: "ASC",
             searchString: "",
-            name: 'Nivethan',
+            name: 'John Doe',
         }
     },
     computed: {
@@ -47,19 +50,26 @@ export default {
             const order = this.order;
 
             filteredWorkers.sort(function(a, b) {
-                var nameA = a[column]+"".toUpperCase();
-                var nameB = b[column]+"".toUpperCase();
-                if (order === "DESC" && nameA > nameB) {
-                    return -1;
-                }
-                if (order === "DESC" && nameA < nameB) {
-                    return 1;
-                }
-                if (nameA < nameB) {
-                    return -1;
-                }
-                if (nameA > nameB) {
-                    return 1;
+                var strA = a[column]+"".toUpperCase();
+                var strB = b[column]+"".toUpperCase();
+                
+                if (order === "DESC") {
+                    if(strA > strB) {
+                        return -1;
+                    }
+
+                    if (strA < strB) {
+                        return 1;
+                    }
+
+                } else {
+
+                    if (strA < strB) {
+                        return -1;
+                    }
+                    if (strA > strB) {
+                        return 1;
+                    }
                 }
                 return 0;
             });
@@ -77,5 +87,8 @@ export default {
             }
         }
     },
-    template: template
+    template: template,
+    mounted() { //initial sort column
+        this.sortColumn = this.defaultSortColumn;
+    }
 }
