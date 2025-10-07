@@ -1,56 +1,42 @@
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 import TheWelcome from './components/TheWelcome.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld,
     TheWelcome
   }
 }
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <span>Vite + Vue 3 + TypeScript</span> 
-      <HelloWorld msg="Eine Vue-App ist das." />
-    </div>
-  </header>
-
   <main>
+    <h1>TodoMatic</h1>
     <TheWelcome />
+    <h2 id="tasks-remaining">2 tasks remaining</h2>
+    <ul role="list" aria-labelledby="tasks-remaining">
+      <li>
+        <div><input type="checkbox" /><label>Task 1</label></div>
+        <div><button>Edit</button><button>Delete</button></div>
+      </li>
+      <li>
+        <div><input type="checkbox" /><label>Task 2</label></div>
+        <div><button>Edit</button><button>Delete</button></div>
+      </li>
+    </ul>
   </main>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
+main  h1 {
+  font-size: 2.5rem;
+  text-align: center;
+  font-weight: 600;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
+main h2 {
+  font-weight:600;
+  font-size:1.75rem;
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
 }
 </style>
