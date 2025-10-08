@@ -1,13 +1,26 @@
+
 <script>
 import TheWelcome from './components/TheWelcome.vue'
+import TodoItem from './components/TodoItem.vue'
 
 export default {
   name: 'App',
   components: {
-    TheWelcome
+    TheWelcome,
+    TodoItem
+  },
+  data () {
+    return {
+      tasks: [
+        { id: 1, task: 'Eat', completed: false },
+        { id: 2, task: 'Sleep', completed: true },
+        { id: 3, task: 'Code', completed: false }
+      ]
+    }
   }
 }
 </script>
+
 
 <template>
   <main>
@@ -15,19 +28,21 @@ export default {
     <TheWelcome />
     <h2 id="tasks-remaining">2 tasks remaining</h2>
     <ul role="list" aria-labelledby="tasks-remaining">
-      <li>
-        <div><input type="checkbox" /><label>Task 1</label></div>
-        <div><button>Edit</button><button>Delete</button></div>
-      </li>
-      <li>
-        <div><input type="checkbox" /><label>Task 2</label></div>
-        <div><button>Edit</button><button>Delete</button></div>
+      <li v-for="task in tasks" :key="task.id">
+        <TodoItem :id="task.id" :task="task.task" :completed="task.completed" />
       </li>
     </ul>
   </main>
 </template>
 
+
 <style scoped>
+
+main {
+  max-width:500px;
+  margin:0 auto;
+}
+
 main  h1 {
   font-size: 2.5rem;
   text-align: center;
@@ -39,4 +54,11 @@ main h2 {
   font-size:1.75rem;
 
 }
+
+main ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
 </style>
