@@ -16,6 +16,13 @@ export default {
             type: Boolean,
             default: false
         }
+    },
+    emits: ['update:completed'],
+    methods: {
+        doStuff($event) {
+            const completed = $event.target.checked;
+            this.$emit('update:completed', completed);
+        }
     }
 }
 
@@ -24,7 +31,7 @@ export default {
 <template>
     <div :id="`todo-item-${id}`" class="todo-item">
         <div>
-            <input :id="id" type="checkbox" :checked="completed" />
+            <input :id="id" type="checkbox" :checked="completed" @click="doStuff($event)"/>
             <label :for="id">{{ task }} </label>
         </div>
         <div class="button-grp">
@@ -38,6 +45,10 @@ export default {
 
 .todo-item {
     margin:2rem 0;
+}
+
+.todo-item:first-child {
+    margin-top:1rem;
 }
 
 .button-grp {
@@ -74,7 +85,7 @@ input[type="checkbox"] {
     cursor: pointer;
     margin: 0 0.5rem 0 0;
     vertical-align: middle;
-    background-color:transparent;
+    background-color: var(--vt-c-white);
     appearance: none;
     -webkit-appearance: none;
     border: 2px solid var(--vt-c-black-mute);
