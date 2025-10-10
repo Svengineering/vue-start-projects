@@ -39,7 +39,7 @@ export default {
 </script>
 
 <template>
-    <div v-if="!is_edit_mode":id="`todo-item-${id}`" class="todo-item">
+    <div v-if="!is_edit_mode" :id="`todo-item-${id}`" class="todo-item">
         <div>
             <input :id="id" type="checkbox" :checked="completed" @click="doStuff($event)"/>
             <label :for="id">{{ task }} </label>

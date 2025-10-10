@@ -7,7 +7,7 @@
     },
     emits: ['create:task'],
     methods: {
-        doStuff($event) {
+        doStuff() {
             this.$emit('create:task',this.newTask);
             this.newTask = '';
         }
@@ -20,7 +20,7 @@
 <template>
 <div class="new-todo">
     <h2>What needs to be done?</h2>
-    <input type="text" placeholder="..." v-model="newTask"  @keydown.enter="doStuff($event)" />
+    <input type="text" placeholder="..." v-model="newTask"  @keydown.enter="doStuff()" />
     <button @click="doStuff($event)">Add</button>
 </div>
 </template>

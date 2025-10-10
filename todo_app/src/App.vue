@@ -4,7 +4,7 @@ import TodoItem from './components/TodoItem.vue'
 import NewTodo from './components/NewTodo.vue'
 
 const filters = { 
-  "all": (task) => true, 
+  "all": () => true, 
   "active": (task) => !task.completed,
   "completed": (task) => task.completed
 };
