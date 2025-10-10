@@ -18,9 +18,10 @@ export default {
   data () {
     return {
       tasks: [
-        { id: 1, task: 'Eat', completed: false },
-        { id: 2, task: 'Sleep', completed: true },
-        { id: 3, task: 'Code', completed: false }
+        { id: 1, task: 'Take a walk', completed: true },
+        { id: 2, task: 'Project planning', completed: true },
+        { id: 3, task: 'Code / Developing', completed: false },
+        { id: 4, task: 'Cooking for dinner', completed: false },
       ],
       filter: 'all'  // all, active, completed
     }
@@ -52,7 +53,7 @@ export default {
   <main>
     <h1>TodoMatic</h1>
     <NewTodo @create:task="add_task"/>
-    <h2 id="tasks-remaining">{{ remaining_tasks > 1 ? `${remaining_tasks} tasks remaining` : ( remaining_tasks ? 'only one task remaining!' : 'everything done' ) }}</h2>
+    <h2 id="tasks-remaining">{{ remaining_tasks > 1 ? `${remaining_tasks} tasks remaining` : ( remaining_tasks ? 'only one task remaining' : 'everything done!' ) }}</h2>
     <div class="filter">
         <button class="all" :class="{ filtered: filter === 'all' }" @click="filter = 'all'">All</button>
         <button class="active" :class="{ filtered: filter === 'active' }" @click="filter = 'active'">Active</button>
@@ -60,11 +61,24 @@ export default {
     </div>
     <ul role="list" aria-labelledby="tasks-remaining">
       <li v-for="task in displayed_tasks" :key="task.id">
-        <TodoItem :id="task.id" :task="task.task" :completed="task.completed" @update:completed="(completed) => task.completed = completed" />
+        <TodoItem 
+          :id="task.id" 
+          :task="task.task" 
+          :completed="task.completed" 
+          @update:completed="(completed) => task.completed = completed" 
+          @delete:task="(id) => this.tasks = this.tasks.filter(task => task.id !== id)"
+          @update:task="({ id, task }) => {
+            for(const t of this.tasks) {
+              if(t.id === id) {
+                t.task = task;
+                break;
+              }
+            }
+          }" />
       </li>
     </ul>
   </main>
-  <footer>{{  JSON.stringify(tasks) }}</footer>
+  <!--<footer>{{  JSON.stringify(tasks) }}</footer>-->
 </template>
 
 
