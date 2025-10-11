@@ -3,7 +3,7 @@
 
 //Note: this template must not begin with a <template> tag
 const template = `
-      <h1>Hallo, {{name}}! <i class="fa-regular fa-house"></i></h1>
+      <h1>Hello, {{name}}! <i class="fa-regular fa-house"></i></h1>
       <div v-if="workers.length === 0">No workers available.</div>
       <div v-else>
         <div style="margin-bottom: 10px;">
