@@ -12,3 +12,5 @@ A Vue app without build step: Data table with filter/search and sorting. <a href
 Built with Vite. Inspired by Mozilla's tutorial for a React ToDo app. [https://developer.mozilla.org/]
 <img width="987" height="983" alt="Screenshot" src="https://github.com/user-attachments/assets/b36719df-df79-443a-a4e8-5d0c68968f16" />
 
+TEST
+
