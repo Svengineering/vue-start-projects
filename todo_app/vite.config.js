@@ -17,7 +17,7 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: 'dist/todo-app'
+    outDir: '../dist/todo-app'
   }
 
 })
