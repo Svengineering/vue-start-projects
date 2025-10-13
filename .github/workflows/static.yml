@@ -36,11 +36,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: ./todo_app
+        working-directory: .
 
       - name: Build
         run: npm run build
-        working-directory: ./todo_app
+        working-directory: .
         
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
@@ -50,4 +50,4 @@ jobs:
         if: github.ref == 'refs/heads/release-gh-pages'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./todo_app/dist
+          publish_dir: ./dist
