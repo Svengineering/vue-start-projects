@@ -50,4 +50,4 @@ jobs:
         if: github.ref == 'refs/heads/release-gh-pages'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          publish_dir: ./todo_app/dist
