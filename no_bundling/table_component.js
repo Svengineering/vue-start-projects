@@ -6,15 +6,22 @@ const template = `
       <h1>Hello, {{name}}! <i class="fa-regular fa-house"></i></h1>
       <div v-if="workers.length === 0">No workers available.</div>
       <div v-else>
-        <div style="margin-bottom: 10px;">
-          <input v-model="searchString" placeholder="Suche" /><i class="fa-regular fa-lightbulb"></i>
+        <div class="header">
+            <div class="info-header">
+                <h2>Staff Directory</h2><p>Manage your staff members here.</p>
+            </div>
+            <div class="search-bar">
+                <i class="fa-regular fa-lightbulb"></i><input type="text" id="search" v-model="searchString" placeholder="Suche" />
+            </div>
         </div>
         <table>
           <thead>
+            <tr>
             <th v-for="header in headers" @click="setSortColumn(header.key)">
               {{header.value}}
               <i class="fa-regular" :class="{ 'fa-circle': this.sortColumn !== header.key, 'fa-circle-up': this.sortColumn === header.key && this.order === 'DESC', 'fa-circle-down': this.sortColumn === header.key && this.order === 'ASC' }"></i>
             </th>
+            </tr>
           </thead>
           <tbody>
               <tr v-for="(worker, index) in filteredWorkers" :key="index">
