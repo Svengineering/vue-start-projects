@@ -11,7 +11,7 @@ const template = `
                 <h2>Staff Directory</h2><p>Manage your staff members here.</p>
             </div>
             <div class="search-bar">
-                <i class="fa-regular fa-lightbulb"></i><input type="text" id="search" v-model="searchString" placeholder="Suche" />
+                <i class="fa-regular fa-lightbulb"></i><input type="text" id="search" v-model="searchString" placeholder="Search" />
             </div>
         </div>
         <table>
