@@ -3,7 +3,7 @@
 ## a Data table - no bundling/build step
 A Vue app without build step: Data table with filter/search and sorting. <a href="https://svengineering.github.io/vue-start-projects/data-table">Demo</a>
 
-<img width="597" height="431" alt="Screenshot no bundling Data Table App" src="https://github.com/user-attachments/assets/592182f7-de52-48a6-a81b-63743beb66e6" />
+<img width="786" height="670" alt="data_table Screenshot" src="https://github.com/user-attachments/assets/207b50a7-e9c5-4e52-84e8-0d27b57516cc" />
 
 [Based on https://dev.to/krowemoh/a-vue3-tutorial-01-using-vue-without-a-build-step-2kkm]
 
