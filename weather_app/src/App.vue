@@ -3,9 +3,7 @@
     <l-map 
       ref="map" 
       v-model:zoom="zoom" 
-      :center="[50.84, 4.39]"
-      @click="addMarker"
-      @update:center="updateCenter"
+      :center="initialMapPosition"
       >
 
       <l-tile-layer
@@ -15,18 +13,27 @@
       ></l-tile-layer>
 
       <l-marker 
-        :lat-lng="markerPosition"
+        v-model:lat-lng="markerPosition"
+        v-bind:draggable="true"
         @click="console.log('Marker clicked')" />
     </l-map>
   </div>
   <div>Zoom ist {{ zoom }}</div>
   <div>Marker Position ist {{ markerPosition }}</div>
+  <button @click="putMarkerInCenter">Put marker into center</button>
+  <button @click="getWeather">Get weather</button>
+  <div><pre>{{ weatherData }}</pre></div>
 </template>
 
 <script>
 import "leaflet/dist/leaflet.css";
+import weatherService from "./weaterService";
 import L, { marker } from 'leaflet';
 import { LCircle, LMap, LTileLayer, LMarker } from "@vue-leaflet/vue-leaflet";
+
+
+const BRUSSELS_LAT_LNG = [50.84, 4.39];
+const INITIAL_ZOOM = 8;
 
 export default {
   components: {
@@ -37,17 +44,34 @@ export default {
   },
   data() {
     return {
-      zoom: 11,
-      markerPosition: [50.84, 4.39],
+      zoom: INITIAL_ZOOM,
+      markerPosition: {lat: 50.84, lng: 4.39},
+      initialMapPosition: BRUSSELS_LAT_LNG,
+      weatherData: null,
     };
   },
   methods: {
-    updateCenter(newCenter) {
-      //console.log("Map center updated to:", newCenter);
-      this.markerPosition = newCenter;
+    putMarkerInCenter() {
+      const mapObject = this.$refs.map.leafletObject;
+      const center = mapObject.getCenter();
+      this.markerPosition = {lat: center.lat, lng: center.lng};
     },
-    addMarker() {
-      console.log("Map clicked");
+    getWeather() {
+
+      const lat = this.markerPosition.lat;
+      const lon = this.markerPosition.lng;
+      weatherService.getWeather(lat, lon)
+        .then((weatherData) => {
+          this.weatherData = weatherData;
+        })
+        .catch((error) => {
+          alert(`Failed to get weather data: ${error}`);
+        });
+      /*
+      const bounds = this.$refs.map.leafletObject.getBounds();
+      if(!bounds.contains(this.markerPosition)) {
+        this.$refs.map.leafletObject.flyTo(this.markerPosition);
+      }*/
     }
   },
 };
