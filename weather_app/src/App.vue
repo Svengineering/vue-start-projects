@@ -1,6 +1,6 @@
 <template>
   <div class="hero">
-    <h1>Weather Service</h1>
+    <h1><span class="text">Weather Service</span><br /><span class="text">Your location</span></h1>
   </div>
   <div class="map-section">
     <div class="map-wrap">
@@ -22,12 +22,19 @@
           @click="console.log('Marker clicked')" />
       </l-map>
     </div>
+    <div class="map-control-panel">
+      <div class="map-control"> 
+        <button @click="putMarkerInCenter">Move marker to center</button>
+        <button @click="getWeather">Get weather</button>
+      </div>
+      
+      <div>Zoom ist {{ zoom }}</div>
+      
+      <div>Marker Position ist {{ markerPosition }}</div>
+      
+      <div><pre>{{ weatherData }}</pre></div>
+    </div>
   </div>
-  <div>Zoom ist {{ zoom }}</div>
-  <div>Marker Position ist {{ markerPosition }}</div>
-  <button @click="putMarkerInCenter">Put marker into center</button>
-  <button @click="getWeather">Get weather</button>
-  <div><pre>{{ weatherData }}</pre></div>
 </template>
 
 <script>
@@ -99,10 +106,18 @@ export default {
 h1 {
   color:white;
   font-family:sans-serif;
-  font-size:4rem;
-  padding-top:5%;
+  font-size:3rem;
+  top:15%;
+  position:relative;
   margin:0 auto;
   max-width:1140px;
+}
+
+h1 .text {
+  background-color: hsla(216, 71%, 20%, 0.9);
+  padding: 0.2em 0.5em;
+  display:inline-block;
+  margin-bottom:0.6rem;
 }
 
 body {
@@ -111,6 +126,7 @@ body {
   /*background-color:#40968B;*/
   /*background-color:#3c463a; */
   background-color:#001a3e;
+  color:white;
 
 }
 
@@ -121,13 +137,33 @@ body {
   border-radius:20px;
   box-shadow:0 0 20px rgba(0, 0, 0, 0.274);
   max-width:60vw;
-  width:500px;
+  width:600px;
   height:500px;
 }
 
 .map-section {
   max-width:1140px;
   margin:0 auto;
+  display:flex;
+  gap:50px;
+}
+
+.map-control {
+  display:flex;
+  gap:50px;
+  align-items:start;
+  margin-top:2rem;
+}
+
+button {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color:#ffa500;
+  color:001a3e;
+  font-size:1.5rem;
+  border-radius:20px;
+  padding:1rem;
+  border:1px solid #fdda99
 }
 
 
