@@ -51,11 +51,6 @@ jobs:
           cp -r ./no_bundling/* ./dist/data-table
           mv ./dist/data-table/first_vue.html ./dist/data-table/index.html
 
-      - name: (temporary for showing) (THIS IS NOT A VUE APP)
-        run: |
-          mkdir dist/scrolling_animation
-          cp -r ./scrolling_animation/* ./dist/scrolling_animation
-
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
