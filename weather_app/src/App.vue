@@ -1,8 +1,8 @@
 <template>
-  <div class="hero">
+  <section class="hero">
     <h1><span class="text">Weather Service</span><br /><span class="text">Your location</span></h1>
-  </div>
-  <div class="map-section">
+  </section>
+  <section class="map-section">
     <div class="map-wrap">
       <l-map 
         ref="map" 
@@ -27,6 +27,34 @@
         <button @click="putMarkerInCenter">Move marker to center</button>
         <button @click="getWeather">Get weather</button>
       </div>
+
+      <div class="weather-info">
+       <div class="info-box temperature">
+        <img class="weather-icon" src="./assets/temperature_day.png" alt="Icon for temperature">
+        <div>
+          <div class="label">Temperature</div>
+          <div class="data">9.8° C</div></div>
+       </div>
+       <div class="info-box humidity">
+        <img class="weather-icon" src="./assets/humidity2.png" alt="Icon for humidity level">
+        <div>
+          <div class="label">Humidity</div>
+          <div class="data">76 %</div></div>
+       </div>
+       <div class="info-box wind-speed">
+        <img class="weather-icon" src="./assets/windsock.png" alt="Icon of a windsock">
+        <div>
+          <div class="label">Wind Speed</div>
+          <div class="data">5 km/h</div></div>
+       </div>
+       <div class="info-box time">
+        <img class="weather-icon" src="./assets/clock.png" alt="Icon of a clock">
+        <div>
+          <div class="label">Time</div>
+          <div class="data">11:00 AM</div>
+        </div>
+       </div>
+      </div>      
       
       <div>Zoom ist {{ zoom }}</div>
       
@@ -34,7 +62,7 @@
       
       <div><pre>{{ weatherData }}</pre></div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -127,6 +155,7 @@ body {
   /*background-color:#3c463a; */
   background-color:#001a3e;
   color:white;
+  font-family:sans-serif;
 
 }
 
@@ -166,5 +195,34 @@ button {
   border:1px solid #fdda99
 }
 
+.weather-icon {
+  filter:invert(1);
+  max-height:60px;
+  aspect-ratio: 1/1;
+}
+
+.weather-info {
+  margin-top:2rem;
+  margin-bottom:2rem;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  grid-row: auto;
+  gap: 20px 0px;
+}
+
+.weather-info .info-box {
+  display:flex;
+  gap:10px;
+}
+
+.weather-info .info-box .label {
+  font-size:1.1rem;
+  color:#ccc;
+}
+
+.weather-info .info-box .data {
+  font-size:2.5rem;
+  font-weight:bold;
+}
 
 </style>
