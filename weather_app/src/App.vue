@@ -23,30 +23,35 @@
       </l-map>
     </div>
     <div class="map-control-panel">
-      <div class="map-control"> 
+
+      <div class="map-control">
+        <button class="button-primary" @click="getWeather">Get weather</button>
         <button @click="putMarkerInCenter">Move marker to center</button>
-        <button @click="getWeather">Get weather</button>
       </div>
 
       <div class="weather-info">
-       <div class="info-box temperature">
+       
+        <div class="info-box temperature">
         <img class="weather-icon" src="./assets/temperature_day.png" alt="Icon for temperature">
         <div>
           <div class="label">Temperature</div>
-          <div class="data">9.8° C</div></div>
+          <div class="data">{{ temperature }}° C</div></div>
        </div>
+       
        <div class="info-box humidity">
         <img class="weather-icon" src="./assets/humidity2.png" alt="Icon for humidity level">
         <div>
           <div class="label">Humidity</div>
-          <div class="data">76 %</div></div>
+          <div class="data">{{ humidity }} %</div></div>
        </div>
+       
        <div class="info-box wind-speed">
         <img class="weather-icon" src="./assets/windsock.png" alt="Icon of a windsock">
         <div>
           <div class="label">Wind Speed</div>
-          <div class="data">5 km/h</div></div>
+          <div class="data">{{ windSpeed }} km/h</div></div>
        </div>
+       
        <div class="info-box time">
         <img class="weather-icon" src="./assets/clock.png" alt="Icon of a clock">
         <div>
@@ -54,6 +59,7 @@
           <div class="data">11:00 AM</div>
         </div>
        </div>
+
       </div>      
       
       <div>Zoom ist {{ zoom }}</div>
@@ -88,6 +94,8 @@ export default {
       markerPosition: {lat: 50.84, lng: 4.39},
       initialMapPosition: BRUSSELS_LAT_LNG,
       weatherData: null,
+      temperature: null,
+      humidity: null,
     };
   },
   methods: {
@@ -103,6 +111,9 @@ export default {
       weatherService.getWeather(lat, lon)
         .then((weatherData) => {
           this.weatherData = weatherData;
+          this.temperature = weatherData?.current?.temperature_2m;
+          this.humidity = weatherData?.current?.relative_humidity_2m;
+          this.windSpeed = weatherData?.current?.wind_speed_10m;
         })
         .catch((error) => {
           alert(`Failed to get weather data: ${error}`);
@@ -119,6 +130,22 @@ export default {
 
 <style>
 
+
+@font-face {
+  font-family: 'Fira Sans';
+  src: url('./assets/FiraSans-Regular.ttf')  format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Fira Sans';
+  src: url('./assets/FiraSans-Bold.ttf')  format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+
 * {
     box-sizing:border-box;
 }
@@ -129,11 +156,11 @@ export default {
   background-size:cover;
   background-position:0% 40%;
   background-repeat: no-repeat;
+  border-bottom:1px solid #cccccc90;
 }
 
 h1 {
   color:white;
-  font-family:sans-serif;
   font-size:3rem;
   top:15%;
   position:relative;
@@ -155,8 +182,7 @@ body {
   /*background-color:#3c463a; */
   background-color:#001a3e;
   color:white;
-  font-family:sans-serif;
-
+  font-family:'Fira Sans', sans-serif;
 }
 
 .map-wrap {
@@ -166,14 +192,15 @@ body {
   border-radius:20px;
   box-shadow:0 0 20px rgba(0, 0, 0, 0.274);
   max-width:60vw;
-  width:600px;
   height:500px;
 }
 
 .map-section {
   max-width:1140px;
   margin:0 auto;
-  display:flex;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  grid-row:auto;
   gap:50px;
 }
 
@@ -187,12 +214,25 @@ body {
 button {
   appearance: none;
   -webkit-appearance: none;
-  background-color:#ffa500;
-  color:001a3e;
+  background-color:transparent;
+  color:white;
+  cursor:pointer;
   font-size:1.5rem;
   border-radius:20px;
   padding:1rem;
-  border:1px solid #fdda99
+  border:1px solid white;
+  font-family:'Fira Sans', sans-serif;
+  transition: transform 0.2s ease-in-out;
+}
+
+button:hover {
+  transform:scale(1.05);
+}
+
+.button-primary {
+  background-color:#e8b500;
+  border:1px solid #fdda99;
+  color:#001a3e;
 }
 
 .weather-icon {
