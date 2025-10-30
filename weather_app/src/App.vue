@@ -35,21 +35,21 @@
         <img class="weather-icon" src="./assets/temperature_day.png" alt="Icon for temperature">
         <div>
           <div class="label">Temperature</div>
-          <div class="data">{{ temperature }}° C</div></div>
+          <div class="data">{{ temperature_cel }}° C</div></div>
        </div>
        
        <div class="info-box humidity">
         <img class="weather-icon" src="./assets/humidity2.png" alt="Icon for humidity level">
         <div>
           <div class="label">Humidity</div>
-          <div class="data">{{ humidity }} %</div></div>
+          <div class="data">{{ humidity_rel }} %</div></div>
        </div>
        
        <div class="info-box wind-speed">
         <img class="weather-icon" src="./assets/windsock.png" alt="Icon of a windsock">
         <div>
           <div class="label">Wind Speed</div>
-          <div class="data">{{ windSpeed }} km/h</div></div>
+          <div class="data">{{ windSpeed_kmh }} km/h</div></div>
        </div>
        
        <div class="info-box time">
@@ -94,8 +94,9 @@ export default {
       markerPosition: {lat: 50.84, lng: 4.39},
       initialMapPosition: BRUSSELS_LAT_LNG,
       weatherData: null,
-      temperature: null,
-      humidity: null,
+      temperature_cel: null,
+      humidity_rel: null,
+      windSpeed_kmh: null,
     };
   },
   methods: {
@@ -111,9 +112,10 @@ export default {
       weatherService.getWeather(lat, lon)
         .then((weatherData) => {
           this.weatherData = weatherData;
-          this.temperature = weatherData?.current?.temperature_2m;
-          this.humidity = weatherData?.current?.relative_humidity_2m;
-          this.windSpeed = weatherData?.current?.wind_speed_10m;
+          this.temperature_cel = weatherData?.current?.temperature_2m;
+          this.humidity_rel = weatherData?.current?.relative_humidity_2m;
+          //wind speed seems correct (esp. unit km/h), after comparing with other services
+          this.windSpeed_kmh = weatherData?.current?.wind_speed_10m; 
         })
         .catch((error) => {
           alert(`Failed to get weather data: ${error}`);
