@@ -3,6 +3,12 @@
 const weatherService = {
     async getWeather(lat, lon) {
 
+        if(lon > 180.0) {
+            lon -= 360;
+        } else if(lon < -180.0) {
+            lon += 360;
+        }
+
         //https://api.open-meteo.com/v1/forecast?latitude=51.25&longitude=7.15&hourly=temperature_2m&current=temperature_2m,relative_humidity_2m,is_day,precipitation,cloud_cover,wind_speed_10m&timezone=auto&forecast_days=1
         const params = new URLSearchParams({
             latitude: lat,

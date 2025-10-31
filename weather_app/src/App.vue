@@ -32,39 +32,35 @@
       <div class="weather-info">
        
         <div class="info-box temperature">
-        <img class="weather-icon" src="./assets/temperature_day.png" alt="Icon for temperature">
+        <div class="icon-wrap"><img class="weather-icon" :src="imgTemperature" alt="Icon for temperature"></div>
         <div>
           <div class="label">Temperature</div>
-          <div class="data">{{ temperature_cel }}° C</div></div>
+          <div class="data">{{ temperature_cel ? temperature_cel + '° C' : '-' }}</div></div>
        </div>
        
        <div class="info-box humidity">
-        <img class="weather-icon" src="./assets/humidity2.png" alt="Icon for humidity level">
+        <div class="icon-wrap"><img class="weather-icon" src="./assets/humidity2.png" alt="Icon for humidity level"></div>
         <div>
           <div class="label">Humidity</div>
-          <div class="data">{{ humidity_rel }} %</div></div>
+          <div class="data">{{ humidity_rel ? humidity_rel + ' %' : '-' }}</div></div>
        </div>
        
        <div class="info-box wind-speed">
-        <img class="weather-icon" src="./assets/windsock.png" alt="Icon of a windsock">
+        <div class="icon-wrap"><img class="weather-icon" src="./assets/windsock.png" alt="Icon of a windsock"></div>
         <div>
           <div class="label">Wind Speed</div>
-          <div class="data">{{ windSpeed_kmh }} km/h</div></div>
+          <div class="data">{{ windSpeed_kmh ? windSpeed_kmh + ' km/h' : '-' }}</div></div>
        </div>
        
        <div class="info-box time">
-        <img class="weather-icon" src="./assets/clock.png" alt="Icon of a clock">
+        <div class="icon-wrap"><img class="weather-icon" src="./assets/clock.png" alt="Icon of a clock"></div>
         <div>
           <div class="label">Time</div>
-          <div class="data">11:00 AM</div>
+          <div class="data">{{ timeDisplay }}</div>
         </div>
        </div>
 
-      </div>      
-      
-      <div>Zoom ist {{ zoom }}</div>
-      
-      <div>Marker Position ist {{ markerPosition }}</div>
+      </div>
       
       <div><pre>{{ weatherData }}</pre></div>
     </div>
@@ -76,6 +72,8 @@ import "leaflet/dist/leaflet.css";
 import weatherService from "./weaterService";
 import L, { marker } from 'leaflet';
 import { LCircle, LMap, LTileLayer, LMarker } from "@vue-leaflet/vue-leaflet";
+import img_day from './assets/temperature_day.png';
+import img_night from './assets/temperature_night.png';
 
 
 const BRUSSELS_LAT_LNG = [50.84, 4.39];
@@ -97,7 +95,18 @@ export default {
       temperature_cel: null,
       humidity_rel: null,
       windSpeed_kmh: null,
+      time: null,
+      is_day: true
     };
+  },
+  computed: {
+    timeDisplay() {
+      const now = this.time ? new Date(this.time) : new Date();
+      return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    },
+    imgTemperature() {
+      return this.is_day ? img_day : img_night;
+    }
   },
   methods: {
     putMarkerInCenter() {
@@ -116,6 +125,10 @@ export default {
           this.humidity_rel = weatherData?.current?.relative_humidity_2m;
           //wind speed seems correct (esp. unit km/h), after comparing with other services
           this.windSpeed_kmh = weatherData?.current?.wind_speed_10m; 
+
+          this.time = weatherData?.current?.time;
+
+          this.is_day = weatherData?.current?.is_day === 1;
         })
         .catch((error) => {
           alert(`Failed to get weather data: ${error}`);
@@ -237,10 +250,25 @@ button:hover {
   color:#001a3e;
 }
 
+.icon-wrap {
+  width:25%;
+  text-align:center; /*horizonally center img icon */
+}
+
 .weather-icon {
   filter:invert(1);
   max-height:60px;
   aspect-ratio: 1/1;
+}
+
+/* make time icon a little bit smaller */
+.time .weather-icon {
+  height:57px;
+}
+
+/* make icon for relative humidity a little bit larger */
+.humidity .weather-icon {
+  height:63px;
 }
 
 .weather-info {
@@ -255,6 +283,7 @@ button:hover {
 .weather-info .info-box {
   display:flex;
   gap:10px;
+  align-items:center;
 }
 
 .weather-info .info-box .label {
