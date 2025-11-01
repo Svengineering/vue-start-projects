@@ -16,7 +16,7 @@ const weatherService = {
             hourly: 'temperature_2m',
             current: 'temperature_2m,relative_humidity_2m,is_day,wind_speed_10m',
             timezone: 'auto',
-            forecast_days: 1,
+            forecast_days: 2,
         });
 
         const url = `https://api.open-meteo.com/v1/forecast?${params.toString()}`;

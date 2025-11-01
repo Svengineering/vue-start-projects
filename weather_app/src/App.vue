@@ -29,40 +29,65 @@
         <button @click="putMarkerInCenter">Move marker to center</button>
       </div>
 
-      <div class="weather-info">
+      <h2>Now</h2>
+      <div class="weather-info info-card">
        
         <div class="info-box temperature">
-        <div class="icon-wrap"><img class="weather-icon" :src="imgTemperature" alt="Icon for temperature"></div>
-        <div>
-          <div class="label">Temperature</div>
-          <div class="data">{{ temperature_cel ? temperature_cel + '° C' : '-' }}</div></div>
-       </div>
-       
-       <div class="info-box humidity">
-        <div class="icon-wrap"><img class="weather-icon" src="./assets/humidity2.png" alt="Icon for humidity level"></div>
-        <div>
-          <div class="label">Humidity</div>
-          <div class="data">{{ humidity_rel ? humidity_rel + ' %' : '-' }}</div></div>
-       </div>
-       
-       <div class="info-box wind-speed">
-        <div class="icon-wrap"><img class="weather-icon" src="./assets/windsock.png" alt="Icon of a windsock"></div>
-        <div>
-          <div class="label">Wind Speed</div>
-          <div class="data">{{ windSpeed_kmh ? windSpeed_kmh + ' km/h' : '-' }}</div></div>
-       </div>
-       
-       <div class="info-box time">
-        <div class="icon-wrap"><img class="weather-icon" src="./assets/clock.png" alt="Icon of a clock"></div>
-        <div>
-          <div class="label">Time</div>
-          <div class="data">{{ timeDisplay }}</div>
+          <div class="icon-wrap"><img class="weather-icon" :src="imgTemperature" alt="Icon for temperature"></div>
+          <div>
+            <div class="label">Temperature</div>
+            <div class="data">{{ temperature_cel ? temperature_cel + '° C' : '-' }}</div></div>
         </div>
-       </div>
+       
+        <div class="info-box humidity">
+          <div class="icon-wrap"><img class="weather-icon" src="./assets/humidity2.png" alt="Icon for humidity level"></div>
+          <div>
+            <div class="label">Humidity</div>
+            <div class="data">{{ humidity_rel ? humidity_rel + ' %' : '-' }}</div></div>
+        </div>
+       
+        <div class="info-box wind-speed">
+          <div class="icon-wrap"><img class="weather-icon" src="./assets/windsock.png" alt="Icon of a windsock"></div>
+          <div>
+            <div class="label">Wind Speed</div>
+            <div class="data">{{ windSpeed_kmh ? windSpeed_kmh + ' km/h' : '-' }}</div></div>
+        </div>
+       
+        <div class="info-box time">
+          <div class="icon-wrap"><img class="weather-icon" src="./assets/clock.png" alt="Icon of a clock"></div>
+          <div>
+            <div class="label">Time</div>
+            <div class="data">{{ timeDisplay }}</div>
+          </div>
+        </div>
 
       </div>
+
+      <h2>Forecast</h2>
+      <div class="forecast info-card">
+        <div class="time-series">
+          <span class="temp">- 19°</span>
+          <span class="time">18:00</span>
+        </div>
+        <div class="time-series">
+          <span class="temp">- 17°</span>
+          <span class="time">00:00</span>
+        </div>
+        <div class="time-series">
+          <span class="temp">- 14°</span>
+          <span class="time">06:00</span>
+        </div>
+        <div class="time-series">
+          <span class="temp">- 10°</span>
+          <span class="time">12:00</span>
+        </div>
+        <div class="time-series">
+          <span class="temp">- 11°</span>
+          <span class="time">18:00</span>
+        </div>
+      </div>
       
-      <div><pre>{{ weatherData }}</pre></div>
+      <div style="margin-top:200px"><pre>{{ weatherData }}</pre></div>
     </div>
   </section>
 </template>
@@ -129,15 +154,17 @@ export default {
           this.time = weatherData?.current?.time;
 
           this.is_day = weatherData?.current?.is_day === 1;
+
+          //const bounds = this.$refs.map.leafletObject.getBounds();
+          //if(!bounds.contains(this.markerPosition)) {
+          this.$refs.map.leafletObject.flyTo(this.markerPosition);
+          //}
+
         })
         .catch((error) => {
           alert(`Failed to get weather data: ${error}`);
         });
-      /*
-      const bounds = this.$refs.map.leafletObject.getBounds();
-      if(!bounds.contains(this.markerPosition)) {
-        this.$refs.map.leafletObject.flyTo(this.markerPosition);
-      }*/
+
     }
   },
 };
@@ -202,7 +229,7 @@ body {
 
 .map-wrap {
   position:relative;
-  top:-250px;
+  top:-220px;
   border:10px solid white;
   border-radius:20px;
   box-shadow:0 0 20px rgba(0, 0, 0, 0.274);
@@ -272,8 +299,6 @@ button:hover {
 }
 
 .weather-info {
-  margin-top:2rem;
-  margin-bottom:2rem;
   display:grid;
   grid-template-columns: 1fr 1fr;
   grid-row: auto;
@@ -294,6 +319,36 @@ button:hover {
 .weather-info .info-box .data {
   font-size:2.5rem;
   font-weight:bold;
+}
+
+.forecast {
+  display:flex;
+  gap:10px;
+  justify-content: space-around;
+}
+
+.time-series {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+.time-series .temp {
+  font-size:2rem;
+  font-weight:bold;
+  padding-bottom:1rem;
+}
+
+.time-series .time {
+  font-size:1.1rem;
+  color:#ccc;
+}
+
+.info-card {
+    background-color: #ffffff10;
+    border-radius: 10px;
+    padding: 10px;
+    border:1px solid #8b8b8bd8;
 }
 
 </style>
