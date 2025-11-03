@@ -1,6 +1,12 @@
 <template>
   <section class="hero">
-    <h1><span class="text">Weather Service</span><br /><span class="text">Your location</span></h1>
+    <div class="hero-content">
+      <h1 class="heading"><span class="text">Weather Service</span><br /><span class="text">Your location</span></h1>
+      <div class="map-control">
+        <button class="button-primary" @click="getWeather">Get weather</button>
+        <button @click="putMarkerInCenter">Move marker to center</button>
+      </div>
+    </div>
   </section>
   <section class="map-section">
     <div class="map-wrap">
@@ -22,12 +28,7 @@
           @click="console.log('Marker clicked')" />
       </l-map>
     </div>
-    <div class="map-control-panel">
-
-      <div class="map-control">
-        <button class="button-primary" @click="getWeather">Get weather</button>
-        <button @click="putMarkerInCenter">Move marker to center</button>
-      </div>
+    <div class="data-control-panel">
 
       <h2>Now</h2>
       <div class="weather-info info-card">
@@ -193,21 +194,43 @@ export default {
 }
 
 .hero {
-  height:66vh;
+  height:55vh;
   background-image:url('./assets/volcano-6.jpg');
   background-size:cover;
   background-position:0% 40%;
   background-repeat: no-repeat;
   border-bottom:1px solid #cccccc90;
+
 }
 
-h1 {
+.hero .hero-content {
+  max-width:1140px;
+  height:100%;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows:auto;
+  grid-template-areas:
+  "heading heading"
+  "left right";
+  column-gap:50px;
+}
+
+.map-control {
+  display:flex;
+  gap:50px;
+  align-items:start;
+  grid-area: right;
+  align-self:end; /* within the hero grid */
+  margin-bottom:50px;
+}
+
+h1.heading {
   color:white;
   font-size:3rem;
-  top:15%;
-  position:relative;
-  margin:0 auto;
-  max-width:1140px;
+  padding-top:10vh;
+  grid-area: heading;
+  margin:0;
 }
 
 h1 .text {
@@ -215,6 +238,13 @@ h1 .text {
   padding: 0.2em 0.5em;
   display:inline-block;
   margin-bottom:0.6rem;
+}
+
+h2 {
+  font-size:1.5rem;
+  margin-top:2rem;
+  margin-bottom:1rem;
+  color:#ccc;
 }
 
 body {
@@ -234,7 +264,7 @@ body {
   border-radius:20px;
   box-shadow:0 0 20px rgba(0, 0, 0, 0.274);
   max-width:60vw;
-  height:500px;
+  height:600px;
 }
 
 .map-section {
@@ -244,13 +274,6 @@ body {
   grid-template-columns: 1fr 1fr;
   grid-row:auto;
   gap:50px;
-}
-
-.map-control {
-  display:flex;
-  gap:50px;
-  align-items:start;
-  margin-top:2rem;
 }
 
 button {
@@ -284,18 +307,18 @@ button:hover {
 
 .weather-icon {
   filter:invert(1);
-  max-height:60px;
+  max-height:55px;
   aspect-ratio: 1/1;
 }
 
 /* make time icon a little bit smaller */
 .time .weather-icon {
-  height:57px;
+  max-height:52px;
 }
 
 /* make icon for relative humidity a little bit larger */
 .humidity .weather-icon {
-  height:63px;
+  max-height:58px;
 }
 
 .weather-info {
@@ -317,7 +340,7 @@ button:hover {
 }
 
 .weather-info .info-box .data {
-  font-size:2.5rem;
+  font-size:2rem;
   font-weight:bold;
 }
 
