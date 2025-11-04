@@ -66,25 +66,9 @@
 
       <h2>Forecast</h2>
       <div class="forecast info-card">
-        <div class="time-series">
-          <span class="temp">- 19°</span>
-          <span class="time">18:00</span>
-        </div>
-        <div class="time-series">
-          <span class="temp">- 17°</span>
-          <span class="time">00:00</span>
-        </div>
-        <div class="time-series">
-          <span class="temp">- 14°</span>
-          <span class="time">06:00</span>
-        </div>
-        <div class="time-series">
-          <span class="temp">- 10°</span>
-          <span class="time">12:00</span>
-        </div>
-        <div class="time-series">
-          <span class="temp">- 11°</span>
-          <span class="time">18:00</span>
+        <div v-for="(entry, index) in forecast" :key="index" class="time-series">
+          <span class="temp">- {{ entry.temp ? entry.temp + '°' : '-' }}</span>
+          <span class="time">{{ entry.time }}</span>
         </div>
       </div>
       
@@ -121,8 +105,13 @@ export default {
       temperature_cel: null,
       humidity_rel: null,
       windSpeed_kmh: null,
-      time: null,
-      is_day: true
+      time: null, //string like 2025-11-04T05:45
+      is_day: true,
+      forecast: [ //max. 5 entries
+        // { time: '18:00', temp: 19 },
+        // { time: '00:00', temp: 17 },
+        // ,,,
+      ]
     };
   },
   computed: {
@@ -146,6 +135,8 @@ export default {
       const lon = this.markerPosition.lng;
       weatherService.getWeather(lat, lon)
         .then((weatherData) => {
+
+          //#1 set weather data
           this.weatherData = weatherData;
           this.temperature_cel = weatherData?.current?.temperature_2m;
           this.humidity_rel = weatherData?.current?.relative_humidity_2m;
@@ -156,10 +147,44 @@ export default {
 
           this.is_day = weatherData?.current?.is_day === 1;
 
+          //#2 pan map to marker position
           //const bounds = this.$refs.map.leafletObject.getBounds();
           //if(!bounds.contains(this.markerPosition)) {
           this.$refs.map.leafletObject.flyTo(this.markerPosition);
           //}
+
+          //#3 fill forecast data
+          const date_obj = new Date(this.time);
+          let first_forecast_hour = (Math.floor(date_obj.getHours() / 6) + 1) * 6; //start of next 6-hour block 
+
+          //first_forecast_hour possible values: 6, 12, 18, 24
+          const forecast = [];
+          for (let i = 0; i < 5; i++) {
+            let forecast_hour = first_forecast_hour + i * 6;
+
+            if(forecast_hour % 24 == 0) {
+              date_obj.setDate(date_obj.getDate() + 1); //move to next day
+            }
+
+            if(forecast_hour >= 24) { //deduct 24 hours if next day 
+              forecast_hour = forecast_hour % 24;
+            }
+
+            console.log(
+              date_obj.getFullYear() + 
+              '-' + 
+              String(date_obj.getMonth() + 1).padStart(2, '0') + //❤️ JS Date
+              '-' + 
+              String(date_obj.getDate()).padStart(2, '0') + 'T' 
+              + String(forecast_hour).padStart(2, '0') + ':00');
+
+            
+            forecast.push({
+              time: `${String(forecast_hour).padStart(2, '0')}:00`,
+              temp: null
+            });
+          }
+          this.forecast = forecast;
 
         })
         .catch((error) => {
@@ -168,6 +193,9 @@ export default {
 
     }
   },
+  mounted() {
+    //this.getWeather();
+  }
 };
 </script>
 
