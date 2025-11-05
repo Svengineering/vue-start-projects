@@ -67,12 +67,11 @@
       <h2>Forecast</h2>
       <div class="forecast info-card">
         <div v-for="(entry, index) in forecast" :key="index" class="time-series">
-          <span class="temp">- {{ entry.temp ? entry.temp + '°' : '-' }}</span>
+          <span class="day-of-week">{{ entry.day_of_week }}</span>
           <span class="time">{{ entry.time }}</span>
+          <span class="temp">{{ entry.temp ? Math.round(entry.temp) + '°' : '-' }}</span>
         </div>
       </div>
-      
-      <div style="margin-top:200px"><pre>{{ weatherData }}</pre></div>
     </div>
   </section>
 </template>
@@ -108,8 +107,8 @@ export default {
       time: null, //string like 2025-11-04T05:45
       is_day: true,
       forecast: [ //max. 5 entries
-        // { time: '18:00', temp: 19 },
-        // { time: '00:00', temp: 17 },
+        // { time: '18:00', temp: 19, day_of_week: 'Tue' },
+        // { time: '00:00', temp: 17, day_of_week: 'Wed' },
         // ,,,
       ]
     };
@@ -166,23 +165,35 @@ export default {
               date_obj.setDate(date_obj.getDate() + 1); //move to next day
             }
 
+            const day_of_week = date_obj.toLocaleDateString([], { weekday: 'short' });
+
             if(forecast_hour >= 24) { //deduct 24 hours if next day 
               forecast_hour = forecast_hour % 24;
             }
 
-            console.log(
+            const date_time_string_iso = 
               date_obj.getFullYear() + 
               '-' + 
               String(date_obj.getMonth() + 1).padStart(2, '0') + //❤️ JS Date
               '-' + 
               String(date_obj.getDate()).padStart(2, '0') + 'T' 
-              + String(forecast_hour).padStart(2, '0') + ':00');
+              + String(forecast_hour).padStart(2, '0') + ':00';
 
-            
-            forecast.push({
-              time: `${String(forecast_hour).padStart(2, '0')}:00`,
-              temp: null
-            });
+            if( ! Array.isArray(weatherData?.hourly?.time) ) {
+              continue;
+            }
+
+            for(const [index, time_string] of weatherData.hourly.time.entries()) {
+              if(time_string === date_time_string_iso) {
+                const temp = weatherData.hourly.temperature_2m[index];
+                forecast.push({
+                  time: `${String(forecast_hour).padStart(2, '0')}:00`,
+                  temp: temp,
+                  day_of_week: day_of_week
+                });
+              }
+            }
+
           }
           this.forecast = forecast;
 
@@ -194,7 +205,7 @@ export default {
     }
   },
   mounted() {
-    //this.getWeather();
+    this.getWeather();
   }
 };
 </script>
@@ -270,7 +281,7 @@ h1 .text {
 
 h2 {
   font-size:1.5rem;
-  margin-top:2rem;
+  margin-top:1rem;
   margin-bottom:1rem;
   color:#ccc;
 }
@@ -286,13 +297,12 @@ body {
 }
 
 .map-wrap {
-  position:relative;
-  top:-220px;
+  margin-top:-220px;
   border:10px solid white;
   border-radius:20px;
   box-shadow:0 0 20px rgba(0, 0, 0, 0.274);
   max-width:60vw;
-  height:600px;
+  min-height:400px;
 }
 
 .map-section {
@@ -354,6 +364,7 @@ button:hover {
   grid-template-columns: 1fr 1fr;
   grid-row: auto;
   gap: 20px 0px;
+  margin-bottom:2rem;
 }
 
 .weather-info .info-box {
@@ -381,18 +392,25 @@ button:hover {
 .time-series {
   display:flex;
   flex-direction:column;
-  align-items:center;
+  align-items:start;
+}
+
+.time-series .day-of-week {
+  font-size:1.0rem;
+  font-weight:bold;
+  padding-bottom:0.25rem;
 }
 
 .time-series .temp {
   font-size:2rem;
   font-weight:bold;
-  padding-bottom:1rem;
+  padding-bottom:rem;
 }
 
 .time-series .time {
   font-size:1.1rem;
   color:#ccc;
+  padding-bottom:0.5rem;
 }
 
 .info-card {
