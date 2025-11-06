@@ -10,9 +10,9 @@
   </section>
   <section class="map-section">
     <div class="map-wrap">
-      <l-map 
-        ref="map" 
-        v-model:zoom="zoom" 
+      <l-map
+        ref="map"
+        v-model:zoom="zoom"
         :center="initialMapPosition"
         >
 
@@ -26,7 +26,17 @@
           v-model:lat-lng="markerPosition"
           v-bind:draggable="true"
           @click="console.log('Marker clicked')" />
+
+        <l-control position="bottomleft" class="leaflet-ui-info">
+          <div class="leaflet-ui-info-content">
+            <strong>How to:</strong> Drag the marker to its new position or move the map and click "Move marker to center".<br/>
+            Click "Get weather" to fetch weather data for the marker.
+          </div>
+        </l-control>
+
       </l-map>
+
+      
     </div>
     <div class="data-control-panel">
 
@@ -80,7 +90,7 @@
 import "leaflet/dist/leaflet.css";
 import weatherService from "./weaterService";
 import L, { marker } from 'leaflet';
-import { LCircle, LMap, LTileLayer, LMarker } from "@vue-leaflet/vue-leaflet";
+import { LMap, LTileLayer, LMarker, LControl } from "@vue-leaflet/vue-leaflet";
 import img_day from './assets/temperature_day.png';
 import img_night from './assets/temperature_night.png';
 
@@ -92,8 +102,8 @@ export default {
   components: {
     LMap,
     LTileLayer,
-    LCircle,
     LMarker,
+    LControl
   },
   data() {
     return {
@@ -233,7 +243,7 @@ export default {
 }
 
 .hero {
-  height:55vh;
+  min-height:55vh;
   background-image:url('./assets/volcano-6.jpg');
   background-size:cover;
   background-position:0% 40%;
@@ -244,7 +254,7 @@ export default {
 
 .hero .hero-content {
   max-width:1140px;
-  height:100%;
+  min-height:55vh; /* the same height as .hero, purpose: the grid should fill the hero section vertically */
   margin:0 auto;
   display:grid;
   grid-template-columns: 1fr 1fr;
@@ -253,6 +263,7 @@ export default {
   "heading heading"
   "left right";
   column-gap:50px;
+  row-gap:20px;
 }
 
 .map-control {
@@ -297,13 +308,19 @@ body {
 }
 
 .map-wrap {
-  margin-top:-220px;
+  margin-top: -200px;
   border:10px solid white;
   border-radius:20px;
   box-shadow:0 0 20px rgba(0, 0, 0, 0.274);
   max-width:60vw;
   min-height:400px;
 }
+
+@media screen and ( max-height: 850px ) { 
+  .map-wrap {
+    margin-top: -120px;
+  }
+ }
 
 .map-section {
   max-width:1140px;
@@ -418,6 +435,15 @@ button:hover {
     border-radius: 10px;
     padding: 10px;
     border:1px solid #8b8b8bd8;
+}
+
+.leaflet-ui-info {
+  background-color: #ffffffcc;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  font-size: 14px;
+  color: #333;
 }
 
 </style>
