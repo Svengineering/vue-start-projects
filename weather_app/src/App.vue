@@ -2,7 +2,7 @@
   <section class="hero">
     <div class="hero-content">
       <h1 class="heading"><span class="text">Weather Service</span><br /><span class="text">Your location</span></h1>
-      <div class="map-control">
+      <div class="map-control show-lg">
         <button class="button-primary" @click="getWeather">Get weather</button>
         <button @click="putMarkerInCenter">Move marker to center</button>
       </div>
@@ -30,13 +30,17 @@
         <l-control position="bottomleft" class="leaflet-ui-info">
           <div class="leaflet-ui-info-content">
             <strong>How to:</strong> Drag the marker to its new position or move the map and click "Move marker to center".<br/>
-            Click "Get weather" to fetch weather data for the marker.
+            "Get weather" fetches weather data for the marker.
           </div>
         </l-control>
 
       </l-map>
 
       
+    </div>
+    <div class="map-control hide-lg">
+        <button class="button-primary" @click="getWeather">Get weather</button>
+        <button @click="putMarkerInCenter">Move marker to center</button>
     </div>
     <div class="data-control-panel">
 
@@ -133,12 +137,22 @@ export default {
     }
   },
   methods: {
+    scrollToMap() {
+      if(document.body.clientWidth >= 600) {
+        return; //only scrolling on small screens
+      }
+      const mapElement = this.$refs.map.$el;
+      mapElement.scrollIntoView({ behavior: 'smooth' });
+    },
     putMarkerInCenter() {
+      this.scrollToMap();
+
       const mapObject = this.$refs.map.leafletObject;
       const center = mapObject.getCenter();
       this.markerPosition = {lat: center.lat, lng: center.lng};
     },
     getWeather() {
+      this.scrollToMap();
 
       const lat = this.markerPosition.lat;
       const lon = this.markerPosition.lng;
@@ -262,7 +276,7 @@ export default {
   grid-template-areas:
   "heading heading"
   "left right";
-  column-gap:50px;
+  column-gap:80px;
   row-gap:20px;
 }
 
@@ -316,19 +330,13 @@ body {
   min-height:400px;
 }
 
-@media screen and ( max-height: 850px ) { 
-  .map-wrap {
-    margin-top: -120px;
-  }
- }
-
 .map-section {
   max-width:1140px;
-  margin:0 auto;
+  margin:0 auto 2rem;
   display:grid;
   grid-template-columns: 1fr 1fr;
   grid-row:auto;
-  gap:50px;
+  column-gap:80px;
 }
 
 button {
@@ -362,18 +370,18 @@ button:hover {
 
 .weather-icon {
   filter:invert(1);
-  max-height:55px;
+  max-height:52px;
   aspect-ratio: 1/1;
 }
 
 /* make time icon a little bit smaller */
 .time .weather-icon {
-  max-height:52px;
+  max-height:49px;
 }
 
 /* make icon for relative humidity a little bit larger */
 .humidity .weather-icon {
-  max-height:58px;
+  max-height:55px;
 }
 
 .weather-info {
@@ -381,7 +389,7 @@ button:hover {
   grid-template-columns: 1fr 1fr;
   grid-row: auto;
   gap: 20px 0px;
-  margin-bottom:2rem;
+  margin-bottom:1rem;
 }
 
 .weather-info .info-box {
@@ -396,7 +404,7 @@ button:hover {
 }
 
 .weather-info .info-box .data {
-  font-size:2rem;
+  font-size:1.8rem;
   font-weight:bold;
 }
 
@@ -419,7 +427,7 @@ button:hover {
 }
 
 .time-series .temp {
-  font-size:2rem;
+  font-size:1.8rem;
   font-weight:bold;
   padding-bottom:rem;
 }
@@ -445,5 +453,109 @@ button:hover {
   font-size: 14px;
   color: #333;
 }
+
+.hide-lg {
+  display:none;
+}
+
+
+@media screen and ( max-height: 850px ) { 
+  .map-wrap {
+    margin-top: -120px;
+  }
+ }
+
+
+ @media screen and ( max-width: 1200px) {
+
+  .map-section {
+    display:block;
+    max-width: 60vw;
+  }
+
+  .map-wrap {
+    margin-bottom: 50px;
+  }
+
+  .map-wrap .leaflet-container {
+    min-height:380px;
+  }
+
+  .map-control.hide-lg {
+    display:flex;
+    justify-content: space-between;
+  }
+
+  .show-lg {
+    display:none; 
+  }
+
+  .hero .hero-content {
+    margin:0 30px;
+  }
+
+ }
+
+ @media screen and ( max-width: 600px) {
+
+  .map-wrap {
+    max-width: 100%;
+    margin-bottom:30px;
+    scroll-margin-top:30px;
+  }
+
+  .map-section {
+    margin-left:30px;
+    margin-right:30px;
+    max-width:100%;
+  }
+
+  button {
+    font-size:1.2rem;
+  }
+
+  h1.heading {
+    font-size:2rem;
+    padding-top:30px;
+  }
+
+  .hero, .hero .hero-content {
+    min-height:45vh;
+  }
+
+  .map-control {
+    gap:30px;
+    margin-bottom:30px;
+  }
+
+  .weather-info {
+    gap:20px 20px;
+  }
+
+  .weather-info .info-box .data {
+    font-size:1.3rem;
+    font-weight:bold;
+  }
+
+  .weather-icon {
+    max-height:35px;
+  }
+
+  /* make time icon a little bit smaller */
+  .time .weather-icon {
+    max-height:33px;
+  }
+
+  /* make icon for relative humidity a little bit larger */
+  .humidity .weather-icon {
+    max-height:37px;
+  }
+
+  .time-series .temp {
+    font-size:1.3rem;
+  }
+
+ }
+
 
 </style>
