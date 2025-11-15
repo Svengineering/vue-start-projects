@@ -173,6 +173,11 @@ export default {
           //#2 pan map to marker position
           //const bounds = this.$refs.map.leafletObject.getBounds();
           //if(!bounds.contains(this.markerPosition)) {
+
+          if(! (this.$refs.map && this.$refs.map.leafletObject) ) {
+            return;
+          }
+
           this.$refs.map.leafletObject.flyTo(this.markerPosition);
           //}
 
