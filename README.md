@@ -1,5 +1,11 @@
 # What are the start projects? 
 
+## a Weather Forecast app 
+Using Leaflet/OpenStreetMap and integrating a weather data API. Built with Vite. <a href="https://svengineering.github.io/vue-start-projects/weather-app">Demo</a>
+
+<img width="1000" height="734" alt="Screenshot Weather App" src="https://github.com/user-attachments/assets/99b8be88-2cdb-4405-a594-9a6f06edf909" />
+
+
 ## a Data table - no bundling/build step
 A Vue app without build step: Data table with filter/search and sorting. <a href="https://svengineering.github.io/vue-start-projects/data-table">Demo</a>
 
