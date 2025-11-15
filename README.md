@@ -3,7 +3,8 @@
 ## a Weather Forecast app 
 Using Leaflet/OpenStreetMap and integrating a weather data API. Built with Vite. <a href="https://svengineering.github.io/vue-start-projects/weather-app">Demo</a>
 
-<img width="1000" height="734" alt="Screenshot Weather App" src="https://github.com/user-attachments/assets/99b8be88-2cdb-4405-a594-9a6f06edf909" />
+<img width="1000" height="734" alt="Screenshot Weather App_1000x734" src="https://github.com/user-attachments/assets/de0c07ca-583d-454c-ac7c-570ff611263d" />
+
 
 
 ## a Data table - no bundling/build step
