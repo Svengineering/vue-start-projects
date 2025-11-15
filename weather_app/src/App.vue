@@ -170,18 +170,8 @@ export default {
 
           this.is_day = weatherData?.current?.is_day === 1;
 
-          //#2 pan map to marker position
-          //const bounds = this.$refs.map.leafletObject.getBounds();
-          //if(!bounds.contains(this.markerPosition)) {
-
-          if(! (this.$refs.map && this.$refs.map.leafletObject) ) {
-            return;
-          }
-
-          this.$refs.map.leafletObject.flyTo(this.markerPosition);
-          //}
-
-          //#3 fill forecast data
+          
+          //#2 fill forecast data
           const date_obj = new Date(this.time);
           let first_forecast_hour = (Math.floor(date_obj.getHours() / 6) + 1) * 6; //start of next 6-hour block 
 
@@ -225,6 +215,17 @@ export default {
 
           }
           this.forecast = forecast;
+
+
+          //#3 pan map to marker position
+
+          if(! (this.$refs.map && this.$refs.map.leafletObject) ) {
+            return;
+          } else {
+            this.$refs.map.leafletObject.flyTo(this.markerPosition);
+          }
+
+                 
 
         })
         .catch((error) => {
